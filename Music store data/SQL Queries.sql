@@ -1,3 +1,5 @@
+-------------------------------------------Easy-------------------------------------------
+
 /*1. Who is the senior most employee based on job title?
 
 To get the table: select * from employee
@@ -73,3 +75,33 @@ inner join invoice i
 on c.customer_id = i.customer_id
 group by i.customer_id, c.first_name, c.last_name, c.city
 order by [Total spent by customer] desc
+
+-------------------------------------------Moderate-------------------------------------------
+
+/*
+1 Write query to return the email, first name, last name, & Genre of all Rock Music listeners. 
+Return your list ordered alphabetically by email starting with A
+*/
+select distinct c.email, c.first_name, c.last_name
+from customer c, invoice i, invoice_line il
+where c.customer_id = i.customer_id
+and i.invoice_id = il.invoice_id
+and il.track_id in (
+	SELECT track_id FROM track t, genre g
+	where t.genre_id = g.genre_id
+	and g.name LIKE 'Rock'
+)
+ORDER BY email;
+
+--Alternatively we can use Joins as well
+
+SELECT DISTINCT email,first_name, last_name
+FROM customer
+JOIN invoice ON customer.customer_id = invoice.customer_id
+JOIN invoice_line ON invoice.invoice_id = invoice_line.invoice_id
+WHERE track_id IN(
+	SELECT track_id FROM track
+	JOIN genre ON track.genre_id = genre.genre_id
+	WHERE genre.name LIKE 'Rock'
+)
+ORDER BY email;
