@@ -105,3 +105,19 @@ WHERE track_id IN(
 	WHERE genre.name LIKE 'Rock'
 )
 ORDER BY email;
+
+/*
+2 Write a query that returns the Artist name and total track count of the top 10 rock bands
+*/
+
+select top 10 ar.name as [Artist Name], count(t.track_id) as [Track Count]
+from artist ar 
+inner join album al on ar.artist_id = al.artist_id
+inner join track t on al.album_id = t.album_id
+where t.track_id in (
+	select track_id from track
+	inner join genre on track.genre_id = genre.genre_id
+	WHERE genre.name LIKE 'Rock'
+)
+group by ar.name
+order by [Track Count] desc
